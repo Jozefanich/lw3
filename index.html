@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lw3</title>
+    <script>
+        let varia;
+        let val = true;
+        let index = -1;
+        let interval = 1000;
+
+        function set_interval(){
+            let inp = document.getElementById('input_interval');
+            interval = inp.value +0;
+            console.log(interval);
+        }
+
+
+        function str(){
+            if(val==true){
+                if(index != -1) clearInterval(index);
+                index = setInterval(function(){varia.insertAdjacentHTML('beforeEnd', '<tr><td>text</td></tr>')},interval);
+            }else{
+                if(index != -1)	clearInterval(index);
+                index = -1;
+            }
+        }
+        function start(){
+            varia = document.getElementById('tab');
+            val=true;
+            str();
+        }
+        function stop(){
+            val = false;
+            str();
+        }
+    </script>
+</head>
+<body>
+    <input type="button" onclick="start()" value="start">    
+    <input type="button" onclick="stop()" value="stop"><br>    
+    <input type="button" onclick="set_interval()" value="set">
+    <input type="number" id="input_interval">    
+    <table id="tab">
+
+    </table>
+</body>
+</html>
