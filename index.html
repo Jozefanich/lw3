@@ -1,24 +1,603 @@
 <!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>lw3</title>
+    <style>
+       .show_ansver{
+            display: none;
+        }
+        label[for^="ansver"]{
+            cursor: pointer;
+            border: 1px dotted black;
+            background-color: lightgray;
+        }
+        .show_ansver + label::before{
+            content: "Показати правильну відповідь";
+        }
+        .show_ansver:checked + label::before{
+            content: "Приховати відповідь";
+        }
+        .show_ansver:checked ~ ol>li[data-content="!--"],
+        .show_ansver:checked ~ ol>li[data-content="le"],
+        .show_ansver:checked ~ ol>li[data-content="type"],
+        .show_ansver:checked ~ ol>li[data-content="li"]
+        {
+            background-color: #ade1FF;
+            color: red;
+            transition: all 0.25s ease-out;
+        }
+
+        #radio_box{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            background-color: darkgray;
+            max-width: 50%;
+            transform: translateX(50%);
+        }
+        .radio_content{
+            background-color: blue;
+            cursor: pointer;
+            margin: 30px;
+            border:1px solid black;
+            align-content: center;
+            text-align: center;
+            width: 50px;
+            height: 50px;
+            font-size: 4ch;
+        }
+        .radio_content::selection{
+            background-color: inherit;
+            color: inherit;
+        }
+        #radio_box{
+            display: flex;
+        }
+        label.radio_content:last-child{
+            background-color: red;
+        }
+        label.radio_content:first-child{
+            background-color: green;
+        }
+        .quest_radio{
+            display: none;
+        }
+        #first, label[for="first"]{
+            order: 2;
+        }
+        #second, label[for="second"]{
+            order: 3;
+        }
+        #third, label[for="third"]{
+            order: 0;
+        }
+        #forth, label[for="forth"]{
+            order: 1;
+        }
+        #tab, #tab tr, #tab td{
+            border: 1px solid black;
+        }
+    </style>
+    <script>
+        active = 0;
+        last_active = 3;
+        elements=0;
+        function set_check(id){
+            if(id-1!=active){
+                console.log('ok');
+                elements[last_active].style.background="blue";
+                last_active = active;
+                active = id-1;
+                elements[active].style.background ='green';
+                elements[last_active].style.background ='red';
+            }
+        }
+
+
+
+        let varia=0;
+        let count_row=1;
+        let val = true;
+        let index = -1;
+        let input_interv;
+        let input_row;
+        let interval = 1000;
+        function set_row_count(val){
+            if(val<1){
+                count_row=1;
+                input_row.value=val;
+                console.log('changed')
+            }
+            if(val > 100){
+                count_row=100;
+                input_row.value=val;
+                console.log('changed')
+            }
+            count_row = parseInt(val,10);
+            console.log(interval);
+        }
+        function set_interval(val){
+            if(val<1){
+                val=1;
+                input_interv.value=val;
+                console.log('changed')
+            }
+            if(val > 999999){
+                val=999999;
+                input_interv.value=val;
+                console.log('changed')
+            }
+            interval = parseInt(val,10);
+            console.log(interval);
+        }
+        function get(){
+            let lin = '';
+            for(let i=0; i<4; i++) lin = lin+ '<td>'+(Math.floor(Math.random()*(10000+10000))-10000)+'</td>';
+            return lin;
+        }
+        function str(){
+            if(val==true){
+                if(index != -1) clearInterval(index);
+                index = setInterval(
+                    function(){
+                        if(varia.childElementCount==0){
+                            varia.insertAdjacentHTML('beforeEnd', '<tr style="background-color:#1fafa4;">'+get()+'</tr>');
+                            for(let i=0; i<count_row-1; i++){
+                                varia.insertAdjacentHTML('beforeEnd', ('<tr style="background-color: '+ ((varia.childElementCount%2==0)?("gray"):("cian"))+'">'+get()+'</tr>'));
+                            }
+                        }
+                        else{
+                            for(let i=0; i<count_row; i++){
+                                varia.insertAdjacentHTML('beforeEnd', ('<tr style="background-color: '+ ((varia.childElementCount%2==0)?("gray"):("cian"))+'">'+get()+'</tr>'));
+                            }
+                        }
+                    },interval);
+            }else{
+                if(index != -1)	clearInterval(index);
+                index = -1;
+            }
+        }
+        function start(){
+            val=true;
+            str();
+            varia.firstChild.style="background-color: green;"
+        }
+        function stop(){
+            val = false;
+            str();
+        }
+    </script>
+</head>
+<body style="background-color: lightcyan">
+    <header id="header">
+        <h1 style="text-align: center; color: darkslateblue;"><strong>Плюси та недоліки різних типів з'єднань проводів</strong></h1>
+        <nav id="main_navigation">
+            <div class="container">
+                <label for="check" class="menu">Використані джерела</label>
+                <input id="check" name="check" type="checkbox" class="check">
+                <div class="spoiler">
+                    <ol style="margin: 0px; padding: 0px;">
+                        <li><a class="link" href="https://knureigs.github.io/itech/" target="_blank">Internet-технології</a></li>
+                        <li><a class="link" href="https://uk.wikipedia.org/wiki/%D0%9A%D0%BE%D1%80%D0%BE%D0%B7%D1%96%D1%8F#Загальна_і_локальна_корозія" target="_blank">Wikipedia</a></li>
+                        <li><a class="link" href="https://profosvita.online/courses/course-v1:Profosvita+CS-K002SFPL+2024/courseware/8d73031584d54692837f85f333fee31d/bc9b1756f1e54b86bf14823169046530/6?activate_block_id=block-v1%3AProfosvita%2BCS-K002SFPL%2B2024%2Btype%40vertical%2Bblock%40e20979c06a454227a976103363a54d10" target="_blank">Проф. освіта: Методи та способи з'єднання проводів і кабелів</a></li>
+                        <li><a class="link" href="https://developer.mozilla.org/ru/docs/Learn_web_development/Core/CSS_layout/Flexbox" target="_blank">Flexbox</a></li>   
+                    </ol>
+                </div>
+            </div>
+            <div class="container">
+                <a class="hiden_link" target="_blank" href="https://github.com/Jozefanich/lw2" title="Репозиторій проєкту на GitHub">Репозиторій</a>
+            </div>
+            <div class="container">
+                <label for="check2" class="menu">Форма реєстрація</label>
+                <input id="check2" class="check" name="form_check" type="checkbox">
+                <div class="spoiler">
+                    <form action="#">
+                        <table>
+                            <caption class="reg_form">Форма реєстрації</caption>
+                            <tr>
+                                <td>
+                                    <label for="name">Ім'я:</label>
+                                </td>
+                                <td>
+                                    <input type="text" id="name"><br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="second_name">Прізвище:</label>
+                                </td>
+                                <td>
+                                    <input type="text" id="second_name"><br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="user_name">Ім'я користувача:</label>
+                                </td>
+                                <td>
+                                    <input type="text" id="user_name"><br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="email">Електронна пошта:</label><br>
+                                </td>
+                                <td>
+                                    <input type="text" id="email"><br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="password">Пароль:</label><br>
+                                </td>
+                                <td>
+                                    <input type="password" id="password"><br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <input type="submit" value="Реєстрація">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="introduction">
+        <section>
+            <h2>Буде розглянуто</h2>
+            7 способів з'єднання проводів, більшість з яких потребують спеціального обладнання та знань.<br>
+            Інколи виникає потреба об'єднати два провідника для забезпечення подачі електроенергії на прилад, але інколи виникають моменти що пряме з'єднання недопустиме, наприлад мідний провідник неможна об'єднувати з алюмінієвим на пряму, оскільки при прямому з'єднанні цих провідників виникає <a href="https://uk.wikipedia.org/wiki/%D0%9A%D0%BE%D1%80%D0%BE%D0%B7%D1%96%D1%8F#Загальна_і_локальна_корозія" title="Посилання на статтю в Wikipedia" target="_blank">гальванічна корозія</a>, що призводить до погірщення контакту та надмірному нагріванню в місці з'єднання. Для запобігання такого використовують спеціальні з'єднання
+            <nav id="navigation">
+                <ol>
+                    <li><a class="link" href="#twisting">Скрутка</a></li>
+                    <li><a class="link" href="#soldering">Пайка</a></li>
+                    <li><a class="link" href="#welding">Зварювання</a></li>
+                    <li><a class="link" href="#crimping">Опресування</a></li>
+                    <li><a class="link" href="#bolt">Гвинтове з'єднання</a></li>
+                    <li><a class="link" href="#screw_terminal">З'єднання з допомогою винтових клем</a></li>
+                    <li><a class="link" href="#spring_terminal">З'єднання з допомогою пружинних клем</a></li>
+                    <li><a class="link" href="#conclusion">Висновки</a></li>
+                    <li><a class="link" href="#questions">Дворівневий список з питаннями та варіантами відповідей</a></li>
+                    <li><a class="link" href="#variant">Решта виконаних завдань згідно варіанту 2</a></li>
+                </ol>
+            </nav>
+        </section>
+    </div>
+    <main id="main_block">
+        <section id="twisting">
+            <h2 class="block_title">Скрутка</h2>
+            <ul>
+                <li>Подібний метод об'єднання рекомендується тільки для тимчасових схем та з'єднанняза перед пайкою/зварюванням.</li>
+                <li><h3 class="block_title">Плюси:</h3>
+                    <ul>
+                        <li>Швидкий монтаж</li>
+                        <li>Відсутність неохідності мати спеціальний інструмент</li>
+                    </ul>    
+                </li>
+                <li><h3 class="block_title">Мінуси:</h3>
+                    <ul>
+                        <li>Дуже низька надійність</li>
+                        <li>Можливий розрив контакту</li>
+                        <li>Не відповідає стандартам</li>
+                        <li>Не можна об'єднувати провідники з різних матеріалів</li>
+                    </ul> 
+                </li>
+            </ul>
+        </section>
+        <aside class="side_panel">
+                <img src="https://cdn11.bigcommerce.com/s-11317/images/stencil/1280x1280/products/782/3813/W01BWR__55344.1265207564.jpg?c=2" alt="warning" width="200" height="250">
+        </aside>
+        <section id="soldering"><h2 class="block_title">Пайка</h2>
+            <ul>
+                <li>З'єднання проводиться за рахунок спаювання двох або більше провідників з однакового матеріалу. Досить розповсюджений та надійний тип з'єдання для малопотужних ліній з відносно низькими температурами, він забезпечить стабільний контакт одно або багатожилових проводів. Максимальна робоча температура з'єднання залежить від температури плавління припою.</li>
+                <li><h3 class="block_title">Плюси:</h3>
+                    <ul>
+                        <li>Надійність</li>
+                        <li>Довготривалість</li>
+                        <li>Відносно низька вартість</li>
+                        <li>Не потребує обслуговування з'єднання з часом</li>
+                    </ul>
+                </li>
+                <li><h3 class="block_title">Мінуси:</h3>
+                    <ul>
+                        <li>Необхідне додаткове обладнання (паяльник)</li>
+                        <li>Потрібні додаткові матеріали (флюс та припій для паяння)</li>
+                        <li>Затратний в часі (зачистка, залужування, пайка та ізоляція)</li>
+                        <li>Підходить тільки для однакових матеріалів</li>
+                        <li>Погано підходить для ліній з великим навантаженнм</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        <aside class="side_panel">
+                <img src="https://i.ytimg.com/vi/uj_PbRBirkQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDmy8znK4lgq37DWVRQAW8NwCR3kw" alt="3 steps to solter copper wire" width="300" height="200">
+                <a class="conclusion_href" href="https://www.youtube.com/watch?v=uj_PbRBirkQ" title="Відео-гайд з пайки двух багатожильних проводів" target="_blank"><i>Посилання на відео</i></a>
+        </aside>        
+        <section id="welding">
+            <h2 class="block_title">Зварювання</h2>
+            <ul>
+                <li>З'єднання проводиться шляхом плавлення двох або більше провідників з одного матеріалу. Часто використовується при об'єднанні провідників. Має дуже високу надійність з'єднання, що зводить но мінімуму можливість роз'єдання провідників в місці зварювання. Як правило використовується в лініях, де необхідна максимальна надійність при подачі відносно великої напруги.</li>
+                <li><h3 class="block_title">Плюси:</h3> 
+                    <ul>
+                        <li>Висока надійність</li>
+                        <li>Стабільність</li>
+                        <li>Не потребує обслуговування з'єднання з часом</li>
+                    </ul>
+                </li>
+                <li><h3 class="block_title">Мінуси:</h3><br>
+                    <ul>
+                        <li>Необхідне спеціальне обладнання (зварювальний апарат)</li>
+                        <li>Підходить тільки для однакових матеріалів</li>
+                    </ul>    
+                </li>
+            </ul>
+        </section>
+        <aside class="side_panel">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlZWu8Tehy3INyHtDDO-Xv4ybxHmhy6l-oXg&s" alt="welding copper wire" width="300" height="200"><br>
+                <a class="conclusion_href" href="https://www.youtube.com/watch?v=A7jZQOPGQis" title="Відео-гайд зі зварювання мідних проводів" target="_blank"><i>Посилання на відео</i></a>
+        </aside>
+        <section id="crimping">
+            <h2 class="block_title">Опресування</h2>
+            <ul>
+                <li>З'єднання проводиться шляхом здавлювання двох або більше провідників в спеціальних гільзах з допомогою спеціального інструменту. Особливо часто використовується для об'єднання багатожильних провідників. Такий спосіб з'єднання часто використовується електриками за швидкість, високу надійність на простоту монтажу.</li>
+                <li><h3 class="block_title">Плюси:</h3>
+                    <ul>
+                        <li>Висока надійність</li>
+                        <li>Швидкий монтаж</li>
+                        <li>Низька вартість монтажу (за наявності спеціального інструменту)</li>
+                        <li>Дозволяє працювати з багатожильними провідниками</li>
+                        <li>Не потребує обслуговування з часом</li>
+                        <li>Підходить для будь-яких навантажень</li>
+                    </ul>
+                </li>
+                <li><h3 class="block_title">Мінуси:</h3>
+                    <ul>
+                        <li>Необхідно мати спеціальний інструмент</li>
+                        <li>Необхідно мати велику різноманітність гільз (для різних матеріалів, поперечного перетину проводу та кількості жил)</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        <aside class="side_panel">
+                <img src="https://img.fruugo.com/product/2/60/1683765602_max.jpg" alt="Інструмент для обтискання лів" width="200" height="300"><br>
+                <a class="conclusion_href" href="https://www.youtube.com/watch?v=goxVeefDpQg" title="Відео-гайд зі зварювання мідних лів" target="_blank"><i>Посилання на відео</i></a>
+        </aside>
+        <section id="bolt">
+            <h2 class="block_title">Гвинтове з'єднання</h2>
+            <ul>
+                <li>Використовується в місцях, де необхідний надійний контакт з можнивістю роз'єднати контакт, або об'єднати провідники з різним поперечним перетином.</li>
+                <li><h3 class="block_title">Плюси:</h3>
+                    <ul>
+                        <li>Надійний контакт (при правильному монтажі та своєчасному обслуговуванні)</li>
+                        <li>Простота монтажу</li>
+                        <li>Дозволяє об'єднувати провідники з різних матеріалів та поперечним перетином</li>
+                        <li>Добре підходить для ліній з відносно великим навантаженням</li>
+                    </ul>
+                </li>
+                <li><h3 class="block_title">Мінуси:</h3>
+                    <ul>
+                        <li>Неестетичне з'єднання</li>
+                        <li>Громісткість монтажу</li>
+                        <li>Необхідне періодичне обслуговування з'єднання</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        <aside class="side_panel">
+                <img src="https://electrica.net.ua/images/_o/articles/kabel-provid/yak-ziednaty-kabel-provid-al-mid-4.jpg" alt="Гвинтове з'єднання проводів" width="250" height="150"><br>
+                <a class="conclusion_href" href="https://www.youtube.com/watch?v=ARCt4N7B8No" title="Болтове з'єднання в електричних шкфчиках" target="_blank"><i>Посилання на відео</i></a>
+        </aside>
+        <section id="screw_terminal">
+            <h2 class="block_title">З'єднання з допомогою винтових клем</h2>
+            <ul>
+                <li>Подібне з'єднання досить просте та швидке при монтажі. Використовується при підключенні освітлення, в розподільчих коробках або для з'єднання провідників з різних матеріалів.</li>
+                <li><h3 class="block_title">Плюси:</h3>
+                    <ul>
+                        <li>Простота монтажу</li>
+                        <li>Низька вартість монтажу</li>
+                        <li>Відсутність необхідних спеціальних інструментів</li>
+                        <li>Дозволяє з'єднати провідники з різних матеріалів</li>
+                        <li>Досить висока надійність (при правильному монтажі та своєчасному обслуговування)</li>
+                    </ul>
+                </li>
+                <li><h3 class="block_title">Мінуси:</h3>
+                    <ul>
+                        <li>Необхідне періодичне обслуговування</li>
+                        <li>З'єднання може бути габаритним</li>
+                        <li>Необхідно мати різноманітні клеми для різних матеріалів та перетинів проводів</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        <aside class="side_panel">
+                <img src="https://ptukr.com/images/produkt/obshie/Platinum_electric_klemmnaya_kolodka.jpg" alt="З'єднання з допомогою винтових клем" width="300" height="200"><br>
+                <a class="conclusion_href" href="https://www.youtube.com/watch?v=DC0ZQROF58M" title="З'єднання з допомогою винтових клем" target="_blank"><i>Посилання на відео</i></a>
+        </aside>
+        <section id="spring_terminal">
+            <h2 class="block_title">З'єднання з допомогою пружинних клем</h2>
+            <ul>
+                <li>Часто використовується для швидкого монтажу малопотужних ліній (освітлення або розподільчі коробки). Ціниться за високу швідкість монтажу, відносно низьку вартість клем та можливість з'єднання різних матеріалів</li>
+                <li><h3 class="block_title">Плюси:</h3>
+                    <ul>
+                        <li>Швидкий монтаж</li>
+                        <li>Висока надійність</li>
+                        <li>Дозволяє з'єднувати провідники з різних матеріалів</li>
+                        <li>Не потребує обслуговування з часом</li>
+                        <li>Компактність</li>
+                        <li>Відносно низька вартість клем</li>
+                    </ul>
+                </li>
+                <li><h3 class="block_title">Мінуси:</h3>
+                    <ul>
+                        <li>Вузька сфера примінення</li>
+                        <li>Використовується тільки в малопотужних лініях</li>
+                        <li>Обмежений список діапазонів поперечних перетинів проводів</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        <aside class="side_panel">
+                <img src="https://elektryk.if.ua/images/statti/Vybyrayemo-klemy-WAGO/3.jpg" alt="З'єднання з допомогою пружинних клем" width="300" height="220"><br>
+                <a class="conclusion_href" href="https://www.youtube.com/watch?v=wnvlSPdSk7M" title="Відео-гайд по пружинним клемам" target="_blank"><i>Посилання на відео</i></a>
+        </aside>
+    </main>
+    <footer id="footer">
+        <section id="conclusion">
+            <h2>Висновки</h2>
+            <div>
+                Отже кожне з'єднання ціниться по своєму, одні за надійність і Довготривалість, інші за швидкість монтажу та зручність, а ще за з'єднання різних металів, оскільки мідні кабелі неможна зє'днувати з алюмінієвими з допомогою скручування, пайки та зварювання.<br>
+                До самих надійних та довготривалих можна віднести <a class="conclusion_href" href="#welding">зварювання</a> та <a class="conclusion_href" href="#crimping">опресування</a>.<br> 
+                До зручних та швидких в монтажі, які не потребують спеціальних інструментів, <a class="conclusion_href" href="#spring_terminal">пружинні</a> та <a class="conclusion_href" href="#screw_terminal">винтові</a> клеми. <br>
+                Для об'єднання кпроводів з різних матеріалів необхідно використовувати методи, які виключають прямий контакт провідників, такі як спеціальні <a class="conclusion_href" href="#screw_terminal">винтові</a>/<a class="conclusion_href" href="#spring_terminal">пружинні</a> клеми або <a class="conclusion_href" href="#bolt">гвинтове з'єднання</a> з шайбою.<br> 
+                Звісно <a class="conclusion_href" href="#bolt">гвинтове з'єднання</a> є досить надійними для великих токів і зірних металів, але подібний метод є достатньо громісткий та потребує періодичного обслуговування, ще не дозволяє примінювати його в місцях, до яких буде неможливо дібратися.<br>
+                Останнє це <a class="conclusion_href" href="#twisting">скрутка</a>, цей метод є дуже застарілим та найменш надійним, також не відповідає сучасним нормам безпеки.   
+            </div>
+        </section>
+        <section id="questions">
+            <h2>Декілька простих питань</h2>
+            <ol>
+                <li>Як закоментувати фрагмент коду в HTML?
+                    <input type="checkbox" id="ansver1" class="show_ansver">
+                    <label for="ansver1"></label>
+                    <ol type="a">
+                        <li data-content="!--">&lt;!-- --&gt;</li>
+                        <li data-content="\\">\\</li>
+                        <li data-content="--">--</li>
+                        <li data-content="/* */">/* */</li>
+                    </ol>
+                </li>
+                <li>Як позначається символ &le; в коді HTML5?
+                    <input type="checkbox" id="ansver2" class="show_ansver">
+                    <label for="ansver2"></label>
+                    <ol type="a">
+                        <li data-content="lt">&amp;lt;</li>
+                        <li data-content="gt">&amp;gt;</li>
+                        <li data-content="let">&amp;let;</li>
+                        <li data-content="le">&amp;le;</li>
+                    </ol>
+                </li>
+                <li>Який атрибут відповідає за вигляд нумерації списку?
+                    <input type="checkbox" id="ansver3" class="show_ansver">
+                    <label for="ansver3"></label>
+                    <ol type="a">
+                        <li data-content="type">type</li>
+                        <li data-content="format">format</li>
+                        <li data-content="value">value</li>
+                        <li data-content="number">number</li>
+                    </ol>
+                </li>
+                <li>Який з тегів не відноситься до списку визначень?
+                    <input type="checkbox" id="ansver4" class="show_ansver">
+                    <label for="ansver4"></label>
+                    <ol type="a">
+                        <li data-content="dl">dl</li>
+                        <li data-content="dt">dt</li>
+                        <li data-content="li">li</li>
+                        <li data-content="dd">dd</li>
+                    </ol>
+                </li>
+            </ol>
+        </section>
+        <section id="variant">
+            <h2>Завдання до варіанту №2</h2>
+            <div id="radio_box">
+                
+                <label for="first"  class="radio_content" onclick="set_check(1)"><input type="radio" name="radio" class="quest_radio" id="first">1</label>
+                
+                <label for="second" class="radio_content" onclick="set_check(2)"><input type="radio" name="radio" class="quest_radio" id="second">2</label>
+                
+                <label for="third"  class="radio_content" onclick="set_check(3)"><input type="radio" name="radio" class="quest_radio" id="third">3</label>
+                
+                <label for="forth"  class="radio_content" onclick="set_check(4)"><input type="radio" name="radio" class="quest_radio" id="forth">4</label>
+            </div>
+        </section>
+        <section>
+            <div style="width: 300px; display: grid; grid-template-columns: 1fr 1fr;">
+                    <label for="input_interval">input_interval:</label>
+                    <input type="number" step="100" value="1000" name="input_interval" id="input_interval" oninput="set_interval(value)">
+                    <label for="input_row_count">input_row_count:</label>
+                    <input type="number" step="1" value="1" name="input_row_count" id="input_row_count" oninput="set_row_count(value)">    
+                    <input type="button" onclick="start()" value="start">    
+                    <input type="button" onclick="stop()" value="stop">    
+            </div>
+            <table id="tab">
+                <tbody>
+                </tbody>
+            </table>
+        </section>
+        <section>
+            <h2>Демонстрація float: left</h2>
+            <div style="width: 70%;">
+                <img style="float: left; margin: 0px 20px 10px 0px; width: 30vw; height: 20vh; min-width: 200px; max-width: 350px; min-height: 150px;" src="https://nure.ua/wp-content/uploads/2021/osin_06122021.png" alt="hol">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat, quibusdam possimus. Repellendus similique porro explicabo rerum commodi, quasi est impedit earum rem laboriosam alias odit? Nam quasi in, blanditiis dolorum explicabo a molestias sint officia. Vitae necessitatibus cumque dolorem obcaecati itaque illo mollitia distinctio et, nesciunt modi libero, voluptatibus laboriosam hic beatae molestiae voluptatem, impedit unde odit praesentium nam eius nulla? Error totam similique iusto laboriosam dicta. A iste est sit laudantium! Accusamus ipsam aliquid consequatur rem iste commodi cupiditate voluptates distinctio, dolor iusto! Aut deleniti at quam, mollitia dolores vero. Tempore aspernatur esse voluptatibus nihil dicta porro, eos incidunt ut ex repudiandae dignissimos quos illo numquam officiis exercitationem aliquam consectetur animi, nesciunt provident nostrum, odit et? Doloremque quibusdam odit rem impedit adipisci labore hic, laudantium odio magnam placeat officia, reprehenderit soluta rerum quos laboriosam corporis ipsam nam. Rem quae nesciunt molestiae, aliquid consequatur repellat commodi hic temporibus excepturi, at ullam reprehenderit natus quas ipsum saepe! Cum earum, libero odit soluta ratione nam tenetur hic id deleniti. Nulla amet at porro, maiores velit nisi quae maxime laudantium tempore asperiores qui molestias id cupiditate et enim hic dolor reiciendis assumenda vero aspernatur, cumque iusto libero ipsa ipsam? Reprehenderit voluptate voluptatem dolor!
+            </div>
+        </section>
+    </footer>
+    <script>
+        varia = document.querySelector('#tab>tbody');
+        input_interv = document.getElementById('input_interval');
+        input_row = document.getElementById('input_row_count');
+        elements = document.getElementsByClassName('radio_content');
+        console.log('ok')
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>lw3</title>
+    <style>
+        #tab, tr, td{
+            border: 1px solid black;
+        }
+    </style>
     <script>
         let varia;
         let val = true;
         let index = -1;
+        let input_interv;
         let interval = 1000;
-
-        function set_interval(){
-            let inp = document.getElementById('input_interval');
-            interval = inp.value +0;
+        let child_count = 0;
+        function set_interval(val){
+            if(val<1){
+                val=1;
+                input_interv.value=val;
+                console.log('changed')
+            }
+            if(val > 999999){
+                val=999999;
+                input_interv.value=val;
+                console.log('changed')
+            }
+            if(val != val-0+''){
+                val = val-0;
+                input_interv.value=val;
+                console.log('changed')
+            }
+            interval = parseInt(val,10);
             console.log(interval);
         }
-
-
         function str(){
             if(val==true){
+                child_count = varia.chi;
                 if(index != -1) clearInterval(index);
                 index = setInterval(function(){varia.insertAdjacentHTML('beforeEnd', '<tr><td>text</td></tr>')},interval);
             }else{
@@ -27,9 +606,9 @@
             }
         }
         function start(){
-            varia = document.getElementById('tab');
             val=true;
             str();
+            varia.firstChild.style="background-color: green;"
         }
         function stop(){
             val = false;
@@ -37,13 +616,18 @@
         }
     </script>
 </head>
-<body>
+<body on="set_selectors()">
     <input type="button" onclick="start()" value="start">    
     <input type="button" onclick="stop()" value="stop"><br>    
-    <input type="button" onclick="set_interval()" value="set">
-    <input type="number" id="input_interval">    
+    <input type="number" min="0" max="999999" step="1" value="1000" id="input_interval" oninput="set_interval(value)">    
     <table id="tab">
-
+        <tbody>
+        </tbody>
     </table>
+    <script>
+        varia = document.querySelector('tbody');
+        input_interv = document.getElementById('input_interval');
+        console.log('ok')
+    </script>
 </body>
-</html>
+</html> -->
