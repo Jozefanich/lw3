@@ -5,87 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
     <title>lw3</title>
-    <style>
-       .show_ansver{
-            display: none;
-        }
-        label[for^="ansver"]{
-            cursor: pointer;
-            border: 1px dotted black;
-            background-color: lightgray;
-        }
-        .show_ansver + label::before{
-            content: "Показати правильну відповідь";
-        }
-        .show_ansver:checked + label::before{
-            content: "Приховати відповідь";
-        }
-        .show_ansver:checked ~ ol>li[data-content="!--"],
-        .show_ansver:checked ~ ol>li[data-content="le"],
-        .show_ansver:checked ~ ol>li[data-content="type"],
-        .show_ansver:checked ~ ol>li[data-content="li"]
-        {
-            background-color: #ade1FF;
-            color: red;
-            transition: all 0.25s ease-out;
-        }
-
-        #radio_box{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            background-color: darkgray;
-            max-width: 50%;
-            transform: translateX(50%);
-        }
-        .radio_content{
-            background-color: blue;
-            cursor: pointer;
-            margin: 30px;
-            border:1px solid black;
-            align-content: center;
-            text-align: center;
-            width: 50px;
-            height: 50px;
-            font-size: 4ch;
-        }
-        .radio_content::selection{
-            background-color: inherit;
-            color: inherit;
-        }
-        #radio_box{
-            display: flex;
-        }
-        label.radio_content:last-child{
-            background-color: red;
-        }
-        label.radio_content:first-child{
-            background-color: green;
-        }
-        .quest_radio{
-            display: none;
-        }
-        #first, label[for="first"]{
-            order: 2;
-        }
-        #second, label[for="second"]{
-            order: 3;
-        }
-        #third, label[for="third"]{
-            order: 0;
-        }
-        #forth, label[for="forth"]{
-            order: 1;
-        }
-        #tab, #tab tr, #tab td{
-            border: 1px solid black;
-        }
-    </style>
     <script defer>
-        active = 0;
-        last_active = 3;
-        elements=0;
+        let active = 0;
+        let last_active = 3;
+        let elements=0;
         function set_check(id){
             if(id-1!=active){
                 console.log('ok');
